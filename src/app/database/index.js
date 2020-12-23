@@ -3,8 +3,9 @@ const Sequelize = require('sequelize');
 const Usuario = require('../models/usuarios');
 
 const databaseConfig = require('../../config/database');
+const Escola = require('../models/escolas');
 
-const models = [Usuario];
+const models = [Usuario, Escola];
 
 class Database {
   constructor() {
@@ -17,7 +18,10 @@ class Database {
 
     models
       .map(model => model.init(this.connection))
-      .map(model => model.associate && model.associate(this.connection.models))
+      .map(model => model.associate(this.connection.models))
+
+    this.connection.sync()
+
   }
 }
 

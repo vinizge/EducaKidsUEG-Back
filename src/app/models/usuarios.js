@@ -38,6 +38,10 @@ class Usuario extends Sequelize.Model {
   checkPassword(password) {
     return bcrypt.compare(password, this.senha);
   }
+
+  static associate(dados) {
+    Usuario.belongsTo(dados.Escola);
+  }
 }
 
 module.exports = Usuario;

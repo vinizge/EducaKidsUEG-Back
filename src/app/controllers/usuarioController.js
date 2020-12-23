@@ -2,7 +2,7 @@ const Usuario = require('../models/usuarios');
 
 class UsuarioController {
   async store(req, res) {
-    if (req.body.nome && req.body.email && req.body.senha) {
+    if (req.body.nome && req.body.email && req.body.senha && req.body.EscolaId) {
       if (req.body.id) {
         try {
           const user = await Usuario.findByPk(req.body.id)
