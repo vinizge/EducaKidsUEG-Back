@@ -34,12 +34,10 @@ class UsuarioController {
   }
 
   async getUsuario(req, res) {
-    console.log(req.body)
     try {
       const achou = await Usuario.findByPk(req.body.id)
       if (achou) {
         delete achou.dataValues.senha;
-        console.log(achou)
         return res.json(achou);
       }
       return res.json({ message: "Usuário não encontrado" });
@@ -50,10 +48,8 @@ class UsuarioController {
   }
 
   async deleteUsuario(req, res) {
-    console.log(req.body)
     try {
       const achou = await Usuario.findByPk(req.body.id);
-      console.log(achou)
       if (achou) {
         await achou.destroy();
         return res.json({ message: "Usuário Deletado!" });

@@ -15,6 +15,7 @@ class Escola extends Sequelize.Model {
 
   static associate(dados) {
     Escola.hasMany(dados.Usuario);
+    Escola.hasMany(dados.Professor);
   }
 }
 
