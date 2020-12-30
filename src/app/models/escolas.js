@@ -14,8 +14,18 @@ class Escola extends Sequelize.Model {
   }
 
   static associate(dados) {
-    Escola.hasMany(dados.Usuario);
-    Escola.hasMany(dados.Professor);
+    Escola.hasMany(dados.Usuario, {
+      onDelete: 'cascade',
+      hooks: true
+    });
+    Escola.hasMany(dados.Professor, {
+      onDelete: 'cascade',
+      hooks: true
+    });
+    Escola.hasMany(dados.Aluno, {
+      onDelete: 'cascade',
+      hooks: true
+    });
   }
 }
 
