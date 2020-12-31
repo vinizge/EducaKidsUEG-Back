@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const Turma = require('../models/turmas')
 
 class Aluno extends Sequelize.Model {
   static init(sequelize) {
@@ -42,6 +43,7 @@ class Aluno extends Sequelize.Model {
 
   static associate(dados) {
     Aluno.belongsTo(dados.Escola);
+    Aluno.belongsToMany(dados.Turma, { through: 'alunoTurma' });
   }
 }
 

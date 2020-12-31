@@ -42,6 +42,10 @@ class Professor extends Sequelize.Model {
 
   static associate(dados) {
     Professor.belongsTo(dados.Escola);
+    Professor.hasMany(dados.Turma, {
+      onDelete: 'cascade',
+      hooks: true
+    });
   }
 }
 

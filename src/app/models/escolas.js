@@ -26,6 +26,10 @@ class Escola extends Sequelize.Model {
       onDelete: 'cascade',
       hooks: true
     });
+    Escola.hasMany(dados.Turma, {
+      onDelete: 'cascade',
+      hooks: true
+    });
   }
 }
 
