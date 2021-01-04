@@ -46,6 +46,14 @@ class Professor extends Sequelize.Model {
       onDelete: 'cascade',
       hooks: true
     });
+    Professor.hasMany(dados.Atividade, {
+      onDelete: 'cascade',
+      hooks: true
+    });
+    Professor.hasMany(dados.Pergunta, {
+      onDelete: 'cascade',
+      hooks: true
+    });
   }
 }
 
