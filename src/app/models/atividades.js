@@ -15,6 +15,9 @@ class Atividade extends Sequelize.Model {
   static associate(dados) {
     Atividade.belongsTo(dados.Professor);
     Atividade.belongsToMany(dados.Turma, { through: 'atividadeTurma' });
+    Atividade.belongsToMany(dados.Pergunta, { through: 'perguntaAtividade' });
+    Atividade.belongsToMany(dados.Midia, { through: 'midiaAtividade' });
+    Atividade.hasMany(dados.ResponderAtividade);
   }
 }
 

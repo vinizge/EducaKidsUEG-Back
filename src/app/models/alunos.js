@@ -44,6 +44,7 @@ class Aluno extends Sequelize.Model {
   static associate(dados) {
     Aluno.belongsTo(dados.Escola);
     Aluno.belongsToMany(dados.Turma, { through: 'alunoTurma' });
+    Aluno.hasMany(dados.ResponderAtividade);
   }
 }
 

@@ -8,13 +8,15 @@ const Disciplina = require('../models/disciplinas');
 const Turma = require('../models/turmas');
 const Atividade = require('../models/atividades');
 const Pergunta = require('../models/perguntas');
+const Midia = require('../models/midias');
+const ResponderAtividade = require('../models/responderAtividades');
 
 const databaseConfig = require('../../config/database');
 
 
 
 
-const models = [Usuario, Escola, Professor, Aluno, Disciplina, Turma, Atividade, Pergunta];
+const models = [Usuario, Escola, Professor, Aluno, Disciplina, Turma, Atividade, Pergunta, Midia, ResponderAtividade];
 
 class Database {
   constructor() {

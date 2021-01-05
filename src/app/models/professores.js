@@ -54,6 +54,10 @@ class Professor extends Sequelize.Model {
       onDelete: 'cascade',
       hooks: true
     });
+    Professor.hasMany(dados.Midia, {
+      onDelete: 'cascade',
+      hooks: true
+    });
   }
 }
 
