@@ -26,9 +26,6 @@ class EscolaController {
 
   async index(req, res) {
     const escolas = await Escola.findAll();
-    escolas.forEach(escola => {
-      delete escola.dataValues.senha;
-    })
     return res.json(escolas);
   }
 
@@ -36,10 +33,9 @@ class EscolaController {
     try {
       const achou = await Escola.findByPk(req.body.id)
       if (achou) {
-        delete achou.dataValues.senha;
         return res.json(achou);
       }
-      return res.json({ message: "Escola não encontrado" });
+      return res.json({ message: "Escola não encontrada" });
 
     } catch (error) {
       return res.json({ message: "Não foi possível realizar a operação" });
@@ -51,9 +47,9 @@ class EscolaController {
       const achou = await Escola.findByPk(req.body.id);
       if (achou) {
         await achou.destroy();
-        return res.json({ message: "Escola Deletado!" });
+        return res.json({ message: "Escola Deletada!" });
       }
-      return res.json({ message: "Escola não encontrado" });
+      return res.json({ message: "Escola não encontrada" });
 
     } catch (error) {
       return res.json({ message: "Não foi possível realizar a operação" });

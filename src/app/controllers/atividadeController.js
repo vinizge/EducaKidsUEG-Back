@@ -4,7 +4,7 @@ const Atividade = require('../models/atividades');
  */
 class AtividadeController {
   async store(req, res) {
-    if (req.body.nome, req.body.ProfessorId) {
+    if (req.body.nome && req.body.ProfessorId) {
       if (req.body.id) {
         try {
           const busca = await Atividade.findByPk(req.body.id)

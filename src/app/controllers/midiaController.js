@@ -4,7 +4,7 @@ const Midia = require('../models/midias');
  */
 class MidiaController {
   async store(req, res) {
-    if (req.body.nome, req.body.ProfessorId) {
+    if (req.body.nome && req.body.ProfessorId && req.body.link) {
       if (req.body.id) {
         try {
           const busca = await Midia.findByPk(req.body.id)

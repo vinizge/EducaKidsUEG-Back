@@ -1,12 +1,17 @@
 const ResponderAtividade = require('../models/responderAtividades');
+const Atividade = require('../models/atividades');
 /**
  * TODO: Ajustar apos
  */
 class ResponderAtividadeController {
   async store(req, res) {
-    if (req.body.nome, req.body.ProfessorId) {
+    if (req.body.AtividadeId && req.body.AlunoId && (req.body.midia || req.body.pergunta) && req.body.resposta) {
       if (req.body.id) {
         try {
+          const atividade = await Atividade.findByPk(req.body.AtividadeId);
+          if (atividade.dataValues.prazo < new Date().now()) {
+            return res.json({ message: "Dados Incompletos" });
+          }
           const busca = await ResponderAtividade.findByPk(req.body.id)
           if (busca) {
             await ResponderAtividade.update(req.body, { where: { id: busca.id } });

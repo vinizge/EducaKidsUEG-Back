@@ -5,10 +5,10 @@ const Professor = require('../models/professores');
 
 class TurmaController {
   async store(req, res) {
-    if (req.body.nome, req.body.ProfessorId, req.body.EscolaId) {
+    if (req.body.nome && req.body.ProfessorId && req.body.EscolaId) {
       if (req.body.id) {
         try {
-          const busca = await Turma.findByPk(req.body.id)
+          const busca = await Turma.findByPk(req.body.id);
           if (busca) {
             await Turma.update(req.body, { where: { id: busca.id } });
             return res.json(busca);
@@ -41,7 +41,14 @@ class TurmaController {
 
   async getTurma(req, res) {
     try {
-      const achou = await Turma.findByPk(req.body.id)
+      const achou = await Turma.findByPk(req.body.id, {
+        include: [
+          {
+            model: Escola,
+            model: Professor
+          }
+        ]
+      });
       if (achou) {
         return res.json(achou);
       }

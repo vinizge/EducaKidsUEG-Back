@@ -4,22 +4,26 @@ const Pergunta = require('../models/perguntas');
  */
 class PerguntaController {
   async store(req, res) {
-    if (req.body.nome, req.body.ProfessorId) {
-      if (req.body.id) {
-        try {
-          const busca = await Pergunta.findByPk(req.body.id)
-          if (busca) {
-            await Pergunta.update(req.body, { where: { id: busca.id } });
-            return res.json(busca);
-          } else {
-            return res.json({ message: "Pergunta não existe" });
-          }
-        } catch (error) {
-          return res.json({ message: "Não foi possível realizar a operação" });
-        }
+    if (req.body.nome && req.body.ProfessorId && 'objetiva' in req.body && req.body.pergunta) {
+      if (req.body.objetiva && (!opcao1 || !opcao2 || !opcao3 || !opcao4 || !gabarito)) {
+        return res.json({ message: "Dados Incompletos" });
       } else {
-        const pergunta = await Pergunta.create(req.body);
-        return res.json(pergunta);
+        if (req.body.id) {
+          try {
+            const busca = await Pergunta.findByPk(req.body.id)
+            if (busca) {
+              await Pergunta.update(req.body, { where: { id: busca.id } });
+              return res.json(busca);
+            } else {
+              return res.json({ message: "Pergunta não existe" });
+            }
+          } catch (error) {
+            return res.json({ message: "Não foi possível realizar a operação" });
+          }
+        } else {
+          const pergunta = await Pergunta.create(req.body);
+          return res.json(pergunta);
+        }
       }
     } else {
       return res.json({ message: "Dados Incompletos" });

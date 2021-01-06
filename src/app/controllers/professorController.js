@@ -3,7 +3,7 @@ const Professor = require('../models/professores');
 
 class ProfessorController {
   async store(req, res) {
-    if (req.body.nome && req.body.email && req.body.senha && req.body.EscolaId) {
+    if (req.body.nome && req.body.email && req.body.EscolaId) {
       req.body.role = 'professor';
       req.body.email = req.body.email.toLowerCase();
       if (req.body.id) {
@@ -20,8 +20,12 @@ class ProfessorController {
           return res.json({ message: "Não foi possível realizar a operação" });
         }
       } else {
-        const professor = await Professor.create(req.body);
-        return res.json(professor);
+        if (req.body.senha) {
+          const professor = await Professor.create(req.body);
+          return res.json(professor);
+        } else {
+          return res.json({ message: "Dados Incompletos" });
+        }
       }
     } else {
       return res.json({ message: "Dados Incompletos" });
@@ -44,7 +48,13 @@ class ProfessorController {
 
   async getProfessor(req, res) {
     try {
-      const achou = await Professor.findByPk(req.body.id)
+      const achou = await Professor.findByPk(req.body.id, {
+        include: [
+          {
+            model: Escola
+          }
+        ]
+      });
       if (achou) {
         delete achou.dataValues.senha;
         return res.json(achou);

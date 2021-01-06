@@ -3,7 +3,7 @@ const Aluno = require('../models/alunos');
 
 class AlunoController {
   async store(req, res) {
-    if (req.body.nome && req.body.email && req.body.senha && req.body.EscolaId) {
+    if (req.body.nome && req.body.email && req.body.EscolaId) {
       req.body.role = 'aluno';
       req.body.email = req.body.email.toLowerCase();
       if (req.body.id) {
@@ -20,8 +20,12 @@ class AlunoController {
           return res.json({ message: "Não foi possível realizar a operação" });
         }
       } else {
-        const aluno = await Aluno.create(req.body);
-        return res.json(aluno);
+        if (req.body.senha) {
+          const aluno = await Aluno.create(req.body);
+          return res.json(aluno);
+        } else {
+          return res.json({ message: "Dados Incompletos" });
+        }
       }
     } else {
       return res.json({ message: "Dados Incompletos" });
@@ -44,7 +48,13 @@ class AlunoController {
 
   async getAluno(req, res) {
     try {
-      const achou = await Aluno.findByPk(req.body.id)
+      const achou = await Aluno.findByPk(req.body.id, {
+        include: [
+          {
+            model: Escola
+          }
+        ]
+      })
       if (achou) {
         delete achou.dataValues.senha;
         return res.json(achou);
