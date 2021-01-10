@@ -6,14 +6,14 @@ class TurmaController {
   async store(req, res) {
 
     if (req.body.nome && req.body.ProfessorId && req.body.EscolaId) {
+      const { turmaDisciplina, ...data } = req.body;
       if (req.body.id) {
         try {
-          const { turmaDisciplina, ...data } = req.body
           const busca = await Turma.findByPk(data.id);
           if (busca) {
             let turma = await Turma.update(data, { where: { id: busca.id } });
             turma = await Turma.findByPk(data.id);
-            // turma.setTurmaDisciplina(turmaDisciplina);
+            turma.setDisciplinas(turmaDisciplina);
             return res.json(turma);
           } else {
             return res.json({ message: "Turma não existe" });
@@ -22,7 +22,8 @@ class TurmaController {
           return res.json({ message: "Não foi possível realizar a operação" });
         }
       } else {
-        const turma = await Turma.create(req.body);
+        let turma = await Turma.create(data);
+        turma.setDisciplinas(turmaDisciplina);
         return res.json(turma);
       }
     } else {
@@ -38,9 +39,9 @@ class TurmaController {
         }, {
           model: Professor,
           attributes: { exclude: ["senha"] }
-        },
-      ],
-      //  attributes: { exclude: ["EscolaId", "ProfessorId"] }
+        }, {
+          model: Disciplina,
+        }]
     });
     return res.json(turmas);
   }
@@ -51,9 +52,12 @@ class TurmaController {
         include: [
           {
             model: Escola,
-            model: Professor
-          }
-        ]
+          }, {
+            model: Professor,
+            attributes: { exclude: ["senha"] }
+          }, {
+            model: Disciplina,
+          }]
       });
       if (achou) {
         return res.json(achou);
