@@ -2,6 +2,8 @@ const crypto = require('crypto');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const User = require('../models/usuarios');
+const Professor = require('../models/professores');
+const Aluno = require('../models/alunos');
 
 exports.login = asyncHandler(async (req, res, next) => {
   const { email, senha } = req.body;
@@ -12,7 +14,10 @@ exports.login = asyncHandler(async (req, res, next) => {
   }
 
   //Check for user
-  const user = await User.findOne({ where: { email } });
+  let user = await Aluno.findOne({ where: { email } });
+  if (!user) {
+    user = await Professor.findOne({ where: { email } });
+  }
   if (!user) {
     return next(new ErrorResponse('Dados inválidos', 401));
   }

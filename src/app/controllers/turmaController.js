@@ -1,17 +1,20 @@
 const Turma = require('../models/turmas');
 const Escola = require('../models/escolas');
 const Professor = require('../models/professores');
-
-
+const Disciplina = require('../models/disciplinas');
 class TurmaController {
   async store(req, res) {
+
     if (req.body.nome && req.body.ProfessorId && req.body.EscolaId) {
       if (req.body.id) {
         try {
-          const busca = await Turma.findByPk(req.body.id);
+          const { turmaDisciplina, ...data } = req.body
+          const busca = await Turma.findByPk(data.id);
           if (busca) {
-            await Turma.update(req.body, { where: { id: busca.id } });
-            return res.json(busca);
+            let turma = await Turma.update(data, { where: { id: busca.id } });
+            turma = await Turma.findByPk(data.id);
+            // turma.setTurmaDisciplina(turmaDisciplina);
+            return res.json(turma);
           } else {
             return res.json({ message: "Turma não existe" });
           }
@@ -32,9 +35,12 @@ class TurmaController {
       include: [
         {
           model: Escola,
-          model: Professor
-        }
-      ]
+        }, {
+          model: Professor,
+          attributes: { exclude: ["senha"] }
+        },
+      ],
+      //  attributes: { exclude: ["EscolaId", "ProfessorId"] }
     });
     return res.json(turmas);
   }

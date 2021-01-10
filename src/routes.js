@@ -7,6 +7,8 @@ const usuarioController = require('./app/controllers/usuarioController');
 const escolaController = require('./app/controllers/escolaController');
 const professorController = require('./app/controllers/professorController');
 const alunoController = require("./app/controllers/alunoController");
+const disciplinaController = require("./app/controllers/disciplinaController");
+const turmaController = require("./app/controllers/turmaController");
 
 /**
  * Login
@@ -40,6 +42,22 @@ routes.post('/alunos/save', alunoController.store);
 routes.post('/alunos/get', alunoController.getAluno);
 routes.get('/alunos/getAll', alunoController.index);
 routes.post('/alunos/delete', alunoController.deleteAluno);
+
+/**
+ * Disciplinas
+ */
+routes.post('/disciplinas/save', disciplinaController.store);
+routes.post('/disciplinas/get', disciplinaController.getDisciplina);
+routes.get('/disciplinas/getAll', disciplinaController.index);
+routes.post('/disciplinas/delete', disciplinaController.deleteDisciplina);
+
+/**
+ * Turmas
+ */
+routes.post('/turmas/save', turmaController.store);
+routes.post('/turmas/get', turmaController.getTurma);
+routes.get('/turmas/getAll', turmaController.index);
+routes.post('/turmas/delete', turmaController.deleteTurma);
 
 routes.get('/', (req, res) => {
   res.json({ message: 'Olá Mundo!' });

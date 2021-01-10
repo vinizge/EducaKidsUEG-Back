@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const { sequelize } = require('./turmas');
 
 class Disciplina extends Sequelize.Model {
   static init(sequelize) {
