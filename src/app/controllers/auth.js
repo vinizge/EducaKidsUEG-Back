@@ -32,11 +32,27 @@ exports.login = asyncHandler(async (req, res, next) => {
   sendTokenResponse(user, 200, res);
 });
 
+exports.getMe = asyncHandler(async (req, res, next) => {
+  let user = await Aluno.findByPk(req.user.id, {
+    attributes: { exclude: ["senha"] }
+  });
+  if (!user) {
+    user = await Professor.findByPk(req.user.id, {
+      attributes: { exclude: ["senha"] }
+    });
+  }
+  res.status(200).json({ success: true, data: user });
+});
+
 //Get token from model, create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
   //Create token
   const token = user.getSignedJwtToken(user.id);
 
-  res.status(statusCode).cookie('token', token).json({ success: true, token });
+  const options = {
+    httpOnly: true,
+  };
+
+  res.status(statusCode).cookie('token', token, options).json({ success: true, token });
 
 }

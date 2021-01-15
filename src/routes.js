@@ -1,5 +1,6 @@
-const { login } = require("./app/controllers/auth");
+const { login, getMe } = require("./app/controllers/auth");
 const { Router } = require('express');
+const { protect } = require('./app/middleware/auth');
 
 const routes = new Router();
 
@@ -9,15 +10,14 @@ const professorController = require('./app/controllers/professorController');
 const alunoController = require("./app/controllers/alunoController");
 const disciplinaController = require("./app/controllers/disciplinaController");
 const turmaController = require("./app/controllers/turmaController");
+const perguntaController = require("./app/controllers/perguntaController");
 
 /**
  * Login
  */
 routes.post('/login', login);
-routes.post('/usuarios/save', usuarioController.store);
-routes.post('/usuarios/get', usuarioController.getUsuario);
-routes.get('/usuarios/getAll', usuarioController.index);
-routes.post('/usuarios/delete', usuarioController.deleteUsuario);
+routes.use(protect);
+routes.get('/login/getMe', getMe)
 
 /**
  * Escolas
@@ -58,6 +58,14 @@ routes.post('/turmas/save', turmaController.store);
 routes.post('/turmas/get', turmaController.getTurma);
 routes.get('/turmas/getAll', turmaController.index);
 routes.post('/turmas/delete', turmaController.deleteTurma);
+
+/**
+ * Turmas
+ */
+routes.post('/perguntas/save', perguntaController.store);
+routes.post('/perguntas/get', perguntaController.getPergunta);
+routes.get('/perguntas/getAll', perguntaController.index);
+routes.post('/perguntas/delete', perguntaController.deletePergunta);
 
 routes.get('/', (req, res) => {
   res.json({ message: 'Olá Mundo!' });

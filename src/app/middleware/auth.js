@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('./async');
 const ErrorResponse = require('../utils/errorResponse');
-const User = require('../models/usuarios');
 const Professor = require('../models/professores');
 const Aluno = require('../models/alunos');
 
@@ -15,7 +14,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
   }
 
   //Set token from cookie
-  else if (req.cookies.token) {
+  if (req.cookies.token) {
     token = req.cookies.token;
   }
 
@@ -27,11 +26,17 @@ exports.protect = asyncHandler(async (req, res, next) => {
   try {
     //Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decoded);
-    req.user = await Aluno.findOne(decoded.id);
+    req.user = await Aluno.findByPk(decoded.id);
     if (!req.user) {
-      await Professor.findOne(decoded.id);
+      req.user = await Professor.findByPk(decoded.id);
     }
+    let user = {
+      id: req.user.id,
+      nome: req.user.nome,
+      email: req.user.email,
+      role: req.user.role
+    }
+    req.user = user;
     next();
 
   } catch (err) {

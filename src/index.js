@@ -9,6 +9,9 @@ dotenv.config({ path: __dirname + '/config/config.env' });
 
 const app = express();
 
+//Cookie Parser
+app.use(cookieParser())
+
 app.use(cors());
 
 const routes = require('./routes');
@@ -17,6 +20,7 @@ require('./app/database')
 
 
 app.use(express.json());
+
 
 app.use(routes);
 

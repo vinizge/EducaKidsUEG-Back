@@ -43,6 +43,7 @@ class TurmaController {
           model: Disciplina,
         }]
     });
+    let user = req.user;
     return res.json(turmas);
   }
 
