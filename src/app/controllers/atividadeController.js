@@ -1,15 +1,21 @@
 const Atividade = require('../models/atividades');
-/**
- * TODO: Ajustar apos
- */
+const Midia = require('../models/midias');
+const Pergunta = require('../models/perguntas');
+const Professor = require('../models/professores');
 class AtividadeController {
   async store(req, res) {
+    const { perguntaAtividade, midiaAtividade, ...data } = req.body;
     if (req.body.nome && req.body.ProfessorId) {
       if (req.body.id) {
         try {
-          const busca = await Atividade.findByPk(req.body.id)
+          const busca = await Atividade.findByPk(data.id)
           if (busca) {
-            await Atividade.update(req.body, { where: { id: busca.id } });
+            let atividade = await Atividade.update(data, { where: { id: busca.id } });
+            console.log(atividade.prototype)
+            atividade = await Atividade.findByPk(data.id);
+            console.log(atividade)
+            atividade.setPergunta(perguntaAtividade);
+            atividade.setMidia(midiaAtividade);
             return res.json(busca);
           } else {
             return res.json({ message: "Atividade não existe" });
@@ -18,7 +24,9 @@ class AtividadeController {
           return res.json({ message: "Não foi possível realizar a operação" });
         }
       } else {
-        const atividade = await Atividade.create(req.body);
+        let atividade = await Atividade.create(req.body);
+        atividade.setPergunta(perguntaAtividade);
+        atividade.setMidia(midiaAtividade);
         return res.json(atividade);
       }
     } else {
@@ -27,13 +35,35 @@ class AtividadeController {
   }
 
   async index(req, res) {
-    const atividades = await Atividade.findAll();
+    const atividades = await Atividade.findAll({
+      where: { ProfessorId: req.user.id }, include:
+        [
+          {
+            model: Professor,
+            attributes: { exclude: ["senha"] }
+          }, {
+            model: Midia
+          }, {
+            model: Pergunta
+          }]
+    });
     return res.json(atividades);
   }
 
   async getAtividade(req, res) {
     try {
-      const achou = await Atividade.findByPk(req.body.id)
+      const achou = await Atividade.findByPk(req.body.id, {
+        include:
+          [
+            {
+              model: Professor,
+              attributes: { exclude: ["senha"] }
+            }, {
+              model: Midia
+            }, {
+              model: Pergunta
+            }]
+      })
       if (achou) {
         return res.json(achou);
       }

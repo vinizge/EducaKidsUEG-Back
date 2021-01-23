@@ -34,7 +34,7 @@ class PerguntaController {
   }
 
   async index(req, res) {
-    const perguntas = await Pergunta.findAll();
+    const perguntas = await Pergunta.findAll({ where: { ProfessorId: req.user.id } });
     return res.json(perguntas);
   }
 

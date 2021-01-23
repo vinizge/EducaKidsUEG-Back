@@ -11,6 +11,8 @@ const alunoController = require("./app/controllers/alunoController");
 const disciplinaController = require("./app/controllers/disciplinaController");
 const turmaController = require("./app/controllers/turmaController");
 const perguntaController = require("./app/controllers/perguntaController");
+const midiaController = require("./app/controllers/midiaController");
+const atividadeController = require("./app/controllers/atividadeController");
 
 /**
  * Login
@@ -60,15 +62,27 @@ routes.get('/turmas/getAll', turmaController.index);
 routes.post('/turmas/delete', turmaController.deleteTurma);
 
 /**
- * Turmas
+ * Perguntas
  */
 routes.post('/perguntas/save', perguntaController.store);
 routes.post('/perguntas/get', perguntaController.getPergunta);
 routes.get('/perguntas/getAll', perguntaController.index);
 routes.post('/perguntas/delete', perguntaController.deletePergunta);
 
-routes.get('/', (req, res) => {
-  res.json({ message: 'Olá Mundo!' });
-});
+/**
+ * Midias
+ */
+routes.post('/midias/save', midiaController.store);
+routes.post('/midias/get', midiaController.getMidia);
+routes.get('/midias/getAll', midiaController.index);
+routes.post('/midias/delete', midiaController.deleteMidia);
+
+/**
+ * Midias
+ */
+routes.post('/atividades/save', atividadeController.store);
+routes.post('/atividades/get', atividadeController.getAtividade);
+routes.get('/atividades/getAll', atividadeController.index);
+routes.post('/atividades/delete', atividadeController.deleteAtividade);
 
 module.exports = routes;

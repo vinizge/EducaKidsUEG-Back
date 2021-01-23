@@ -1,9 +1,11 @@
 const Midia = require('../models/midias');
+const Professor = require('../models/professores')
 /**
  * TODO: Ajustar apos
  */
 class MidiaController {
   async store(req, res) {
+    req.body.ProfessorId = req.user.id;
     if (req.body.nome && req.body.ProfessorId && req.body.link) {
       if (req.body.id) {
         try {
@@ -33,7 +35,14 @@ class MidiaController {
 
   async getMidia(req, res) {
     try {
-      const achou = await Midia.findByPk(req.body.id)
+      const achou = await Midia.findByPk(req.body.id, {
+        include: {
+          model: Professor,
+          attributes: { exclude: ["senha"] }
+        }, attributes: {
+          exclude: ["ProfessorId"]
+        }
+      })
       if (achou) {
         return res.json(achou);
       }
