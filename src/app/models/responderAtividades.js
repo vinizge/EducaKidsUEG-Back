@@ -5,7 +5,10 @@ class ResponderAtividade extends Sequelize.Model {
     super.init({
       idPergunta: Sequelize.INTEGER,
       idMidia: Sequelize.INTEGER,
-      resposta: Sequelize.STRING
+      nota: Sequelize.FLOAT,
+      correcao: Sequelize.BOOLEAN,
+      resposta: Sequelize.STRING,
+      arquivo: Sequelize.STRING
     }, {
       sequelize,
       freezeTableName: true

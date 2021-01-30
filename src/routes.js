@@ -13,6 +13,7 @@ const turmaController = require("./app/controllers/turmaController");
 const perguntaController = require("./app/controllers/perguntaController");
 const midiaController = require("./app/controllers/midiaController");
 const atividadeController = require("./app/controllers/atividadeController");
+const responderAtividadeController = require("./app/controllers/responderAtividadeController");
 
 /**
  * Login
@@ -78,11 +79,19 @@ routes.get('/midias/getAll', midiaController.index);
 routes.post('/midias/delete', midiaController.deleteMidia);
 
 /**
- * Midias
+ * Atividades
  */
 routes.post('/atividades/save', atividadeController.store);
 routes.post('/atividades/get', atividadeController.getAtividade);
 routes.get('/atividades/getAll', atividadeController.index);
 routes.post('/atividades/delete', atividadeController.deleteAtividade);
+
+/**
+ * Responder atividades
+ */
+routes.post('/responderAtividades/save', responderAtividadeController.store);
+routes.post('/responderAtividades/get', responderAtividadeController.getResponderAtividade);
+routes.get('/responderAtividades/getAll', responderAtividadeController.index);
+routes.post('/responderAtividades/delete', responderAtividadeController.deleteResponderAtividade);
 
 module.exports = routes;

@@ -4,7 +4,6 @@ class Atividade extends Sequelize.Model {
   static init(sequelize) {
     super.init({
       nome: Sequelize.STRING,
-      nota: Sequelize.FLOAT,
       prazo: Sequelize.DATE
     }, {
       sequelize,

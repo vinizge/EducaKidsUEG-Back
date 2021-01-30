@@ -1,30 +1,43 @@
 const ResponderAtividade = require('../models/responderAtividades');
 const Atividade = require('../models/atividades');
+const Pergunta = require('../models/perguntas');
 /**
  * TODO: Ajustar apos
  */
 class ResponderAtividadeController {
   async store(req, res) {
-    if (req.body.AtividadeId && req.body.AlunoId && (req.body.midia || req.body.pergunta) && req.body.resposta) {
+    if (req.body.AtividadeId && req.body.AlunoId && (req.body.Midia.length || req.body.Pergunta.length)) {
       if (req.body.id) {
         try {
-          const atividade = await Atividade.findByPk(req.body.AtividadeId);
-          if (atividade.dataValues.prazo < new Date().now()) {
-            return res.json({ message: "Dados Incompletos" });
+          for (const pergunta of req.body.Pergunta) {
+            const busca = await ResponderAtividade.findByPk(pergunta.id)
+            if (busca) {
+              await ResponderAtividade.update(pergunta, { where: { id: busca.id } });
+            } else {
+              return res.json({ message: "ResponderAtividade não existe" });
+            }
           }
-          const busca = await ResponderAtividade.findByPk(req.body.id)
-          if (busca) {
-            await ResponderAtividade.update(req.body, { where: { id: busca.id } });
-            return res.json(busca);
-          } else {
-            return res.json({ message: "ResponderAtividade não existe" });
-          }
+          return res.json({ message: "Perguntas respondidas com sucesso!" });
         } catch (error) {
           return res.json({ message: "Não foi possível realizar a operação" });
         }
       } else {
-        const responderAtividade = await ResponderAtividade.create(req.body);
-        return res.json(responderAtividade);
+        try {
+          const atividade = await Atividade.findByPk(req.body.AtividadeId);
+          if (atividade.dataValues.prazo != null && atividade.dataValues.prazo < new Date().now()) {
+            return res.json({ message: "Dados Incompletos" });
+          }
+          for (const pergunta of req.body.Pergunta) {
+            const busca = await Pergunta.findByPk(pergunta.idPergunta);
+            if (busca.dataValues.objetiva && (busca.dataValues.gabarito == pergunta.resposta)) {
+              pergunta.nota = busca.dataValues.pontuacao;
+            }
+            await ResponderAtividade.create(pergunta);
+          }
+          return res.json({ message: "Perguntas respondidas com sucesso!" });
+        } catch (error) {
+          return res.json({ message: "Não foi possível realizar a operação" });
+        }
       }
     } else {
       return res.json({ message: "Dados Incompletos" });
