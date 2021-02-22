@@ -8,7 +8,6 @@ const usuarioController = require('./app/controllers/usuarioController');
 const escolaController = require('./app/controllers/escolaController');
 const professorController = require('./app/controllers/professorController');
 const alunoController = require("./app/controllers/alunoController");
-const disciplinaController = require("./app/controllers/disciplinaController");
 const turmaController = require("./app/controllers/turmaController");
 const perguntaController = require("./app/controllers/perguntaController");
 const midiaController = require("./app/controllers/midiaController");
@@ -28,6 +27,7 @@ routes.get('/login/getMe', getMe)
 routes.post('/escolas/save', escolaController.store);
 routes.post('/escolas/get', escolaController.getEscola);
 routes.get('/escolas/getAll', escolaController.index);
+routes.get('/escolas/getEscolaByProfessor', escolaController.getEscolaByProfessor);
 routes.post('/escolas/delete', escolaController.deleteEscola);
 
 /**
@@ -47,20 +47,13 @@ routes.get('/alunos/getAll', alunoController.index);
 routes.post('/alunos/delete', alunoController.deleteAluno);
 
 /**
- * Disciplinas
- */
-routes.post('/disciplinas/save', disciplinaController.store);
-routes.post('/disciplinas/get', disciplinaController.getDisciplina);
-routes.get('/disciplinas/getAll', disciplinaController.index);
-routes.post('/disciplinas/delete', disciplinaController.deleteDisciplina);
-
-/**
  * Turmas
  */
 routes.post('/turmas/save', turmaController.store);
 routes.post('/turmas/get', turmaController.getTurma);
 routes.get('/turmas/getAll', turmaController.index);
 routes.post('/turmas/delete', turmaController.deleteTurma);
+routes.get('/turmas/getAllByProfessor', turmaController.getTurmasByProfessor);
 
 /**
  * Perguntas
@@ -69,6 +62,7 @@ routes.post('/perguntas/save', perguntaController.store);
 routes.post('/perguntas/get', perguntaController.getPergunta);
 routes.get('/perguntas/getAll', perguntaController.index);
 routes.post('/perguntas/delete', perguntaController.deletePergunta);
+routes.put('/perguntas/:id/image', perguntaController.salvarImagem);
 
 /**
  * Midias

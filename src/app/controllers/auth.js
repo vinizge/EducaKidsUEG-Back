@@ -53,6 +53,9 @@ const sendTokenResponse = (user, statusCode, res) => {
     httpOnly: true,
   };
 
-  res.status(statusCode).cookie('token', token, options).json({ success: true, token });
+  res.status(statusCode).cookie('token', token, options).json({
+    success: true,
+    role: user.role, token
+  });
 
 }

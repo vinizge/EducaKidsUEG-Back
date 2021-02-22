@@ -10,7 +10,8 @@ class Pergunta extends Sequelize.Model {
       opcao4: Sequelize.STRING,
       objetiva: Sequelize.BOOLEAN,
       gabarito: Sequelize.STRING,
-      pontuacao: Sequelize.FLOAT
+      pontuacao: Sequelize.FLOAT,
+      arquivo: Sequelize.STRING
     }, {
       sequelize,
       freezeTableName: true

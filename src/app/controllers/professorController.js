@@ -48,7 +48,9 @@ class ProfessorController {
 
   async getProfessor(req, res) {
     try {
-      const achou = await Professor.findByPk(req.body.id);
+      const achou = await Professor.findByPk(req.body.id, {
+        include: { model: Escola }
+      });
       if (achou) {
         delete achou.dataValues.senha;
         return res.json(achou);

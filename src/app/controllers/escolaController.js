@@ -1,4 +1,5 @@
 const Escola = require('../models/escolas');
+const Professor = require('../models/professores');
 
 class EscolaController {
   async store(req, res) {
@@ -32,6 +33,20 @@ class EscolaController {
   async getEscola(req, res) {
     try {
       const achou = await Escola.findByPk(req.body.id)
+      if (achou) {
+        return res.json(achou);
+      }
+      return res.json({ message: "Escola não encontrada" });
+
+    } catch (error) {
+      return res.json({ message: "Não foi possível realizar a operação" });
+    }
+  }
+
+  async getEscolaByProfessor(req, res) {
+    try {
+      const professor = await Professor.findByPk(req.user.id);
+      const achou = await Escola.findByPk(professor.dataValues.EscolaId)
       if (achou) {
         return res.json(achou);
       }
