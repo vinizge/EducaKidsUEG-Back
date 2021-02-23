@@ -25,7 +25,7 @@ class ResponderAtividadeController {
         try {
           const atividade = await Atividade.findByPk(req.body.AtividadeId);
           if (atividade.dataValues.prazo != null && atividade.dataValues.prazo < new Date().now()) {
-            return res.json({ message: "Dados Incompletos" });
+            return res.json({ message: "Fora do prazo" });
           }
           for (const pergunta of req.body.Pergunta) {
             const busca = await Pergunta.findByPk(pergunta.idPergunta);

@@ -1,8 +1,10 @@
+const Aluno = require('../models/alunos');
 const { options } = require('../models/atividades');
 const Atividade = require('../models/atividades');
 const Midia = require('../models/midias');
 const Pergunta = require('../models/perguntas');
 const Professor = require('../models/professores');
+const ResponderAtividade = require('../models/responderAtividades');
 const Turma = require('../models/turmas');
 class AtividadeController {
   async store(req, res) {
@@ -54,9 +56,43 @@ class AtividadeController {
       });
       return res.json(atividades);
     } else if (req.user.role == "aluno") {
-
+      const aluno = await Aluno.findByPk(req.user.id, {
+        include: {
+          model: Turma
+        }
+      });
+      let turmaId = aluno.getDataValue("Turmas")[0].dataValues.id;
+      const atividades = await Atividade.findAll({
+        include:
+          [
+            {
+              model: Professor,
+              attributes: { exclude: ["senha"] }
+            }, {
+              model: Midia
+            }, {
+              model: Pergunta
+            }, {
+              model: Turma
+            }]
+      });
+      let lista = new Array();
+      for (const atividade of atividades) {
+        if (atividade.Turmas[0].id == turmaId) {
+          lista.push(atividade);
+        }
+      }
+      const respondidas = await ResponderAtividade.findAll();
+      let listaFinal = lista;
+      for (let i = 0; i < lista.length; i++) {
+        for (let j = 0; j < respondidas.length; j++) {
+          if (lista[i].id == respondidas[j].dataValues.AtividadeId) {
+            listaFinal.splice([i, 1]);
+          }
+        }
+      }
+      return res.json(listaFinal);
     }
-
   }
 
   async getAtividade(req, res) {
