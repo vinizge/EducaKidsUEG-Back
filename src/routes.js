@@ -85,6 +85,7 @@ routes.post('/atividades/delete', atividadeController.deleteAtividade);
  */
 routes.post('/responderAtividades/save', responderAtividadeController.store);
 routes.post('/responderAtividades/get', responderAtividadeController.getResponderAtividade);
+routes.post('/responderAtividades/getAllbyAtividade', responderAtividadeController.getAllByAtividade);
 routes.get('/responderAtividades/getAll', responderAtividadeController.index);
 routes.post('/responderAtividades/delete', responderAtividadeController.deleteResponderAtividade);
 

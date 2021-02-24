@@ -78,20 +78,27 @@ class AtividadeController {
       });
       let lista = new Array();
       for (const atividade of atividades) {
-        if (atividade.Turmas[0].id == turmaId) {
+        if ((atividade.Turmas[0].id == turmaId) && (!atividade.Turmas[0].prazo || atividade.Turmas[0].prazo <= Date.now())) {
           lista.push(atividade);
         }
       }
+
       const respondidas = await ResponderAtividade.findAll();
-      let listaFinal = lista;
-      for (let i = 0; i < lista.length; i++) {
-        for (let j = 0; j < respondidas.length; j++) {
-          if (lista[i].id == respondidas[j].dataValues.AtividadeId) {
-            listaFinal.splice([i, 1]);
+      if (respondidas) {
+        let listaFinal = lista;
+        for (let i = 0; i < lista.length; i++) {
+          for (let j = 0; j < respondidas.length; j++) {
+            if (lista[i] && (lista[i].id == respondidas[j].dataValues.AtividadeId) && (respondidas[j].dataValues.AlunoId == req.user.id)) {
+              delete listaFinal[i];
+            }
           }
         }
+        var filtered = listaFinal.filter(function (el) {
+          return el != null;
+        });
+        return res.json(filtered);
       }
-      return res.json(listaFinal);
+      return lista;
     }
   }
 

@@ -1,6 +1,8 @@
 const ResponderAtividade = require('../models/responderAtividades');
 const Atividade = require('../models/atividades');
 const Pergunta = require('../models/perguntas');
+const Aluno = require('../models/alunos');
+const Midia = require('../models/midias');
 /**
  * TODO: Ajustar apos
  */
@@ -46,6 +48,33 @@ class ResponderAtividadeController {
 
   async index(req, res) {
     const responderAtividades = await ResponderAtividade.findAll();
+    return res.json(responderAtividades);
+  }
+
+  async getAllByAtividade(req, res) {
+    console.log(req.body)
+    let id = req.body.atividadeId
+    const responderAtividades = await ResponderAtividade.findAll({
+      where: {
+        atividade_id: id
+      }, include: [
+        {
+          model: Aluno,
+          attributes: ["id", 'nome']
+        }
+      ]
+    });
+
+    for (let i = 0; i < responderAtividades.length; i++) {
+      if (responderAtividades[i].dataValues.idPergunta) {
+        let pergunta = await Pergunta.findByPk(responderAtividades[i].idPergunta);
+        responderAtividades[i].dataValues.pergunta = pergunta;
+      } else if (responderAtividades[i].dataValues.idMidia) {
+        let midia = await Midia.findByPk(responderAtividades[i].idMidia);
+        responderAtividades[i].dataValues.midia = midia;
+      }
+
+    }
     return res.json(responderAtividades);
   }
 
