@@ -36,9 +36,6 @@ class ResponderAtividadeController {
               perguntas[i].nota = busca.dataValues.pontuacao;
             }
             let salvando = await ResponderAtividade.create(perguntas[i]);
-            if (salvando) {
-              console.log("Salvo")
-            }
           }
           return res.json({ message: "Perguntas respondidas com sucesso!" });
         } catch (error) {
@@ -56,7 +53,6 @@ class ResponderAtividadeController {
   }
 
   async getAllByAtividade(req, res) {
-    console.log(req.body)
     let id = req.body.atividadeId
     const responderAtividades = await ResponderAtividade.findAll({
       where: {

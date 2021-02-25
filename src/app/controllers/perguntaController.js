@@ -71,16 +71,6 @@ class PerguntaController {
       return res.json({ message: "Não foi possível realizar a operação" });
     }
   }
-
-  async salvarImagem(req, res) {
-    // const pergunta = await Pergunta.findByPk(req.params.id);
-
-
-    console.log(req.files)
-    console.log(req.body)
-    return res.json({ message: "Topper" });
-  }
-
 }
 
 module.exports = new PerguntaController();
