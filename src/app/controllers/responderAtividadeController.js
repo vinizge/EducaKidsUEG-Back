@@ -29,16 +29,20 @@ class ResponderAtividadeController {
           if (atividade.dataValues.prazo != null && atividade.dataValues.prazo < new Date().now()) {
             return res.json({ message: "Fora do prazo" });
           }
-          for (const pergunta of req.body.Pergunta) {
-            const busca = await Pergunta.findByPk(pergunta.idPergunta);
-            if (busca.dataValues.objetiva && (busca.dataValues.gabarito == pergunta.resposta)) {
-              pergunta.nota = busca.dataValues.pontuacao;
+          let perguntas = req.body.Pergunta;
+          for (let i = 0; i < perguntas.length; i++) {
+            const busca = await Pergunta.findByPk(perguntas[i].idPergunta);
+            if (busca.dataValues.objetiva && (busca.dataValues.gabarito == perguntas[i].resposta)) {
+              perguntas[i].nota = busca.dataValues.pontuacao;
             }
-            await ResponderAtividade.create(pergunta);
+            let salvando = await ResponderAtividade.create(perguntas[i]);
+            if (salvando) {
+              console.log("Salvo")
+            }
           }
           return res.json({ message: "Perguntas respondidas com sucesso!" });
         } catch (error) {
-          return res.json({ message: "Não foi possível realizar a operação" });
+          return res.json({ error, message: "Não foi possível realizar a operação" });
         }
       }
     } else {

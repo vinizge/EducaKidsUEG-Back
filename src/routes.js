@@ -62,7 +62,6 @@ routes.post('/perguntas/save', perguntaController.store);
 routes.post('/perguntas/get', perguntaController.getPergunta);
 routes.get('/perguntas/getAll', perguntaController.index);
 routes.post('/perguntas/delete', perguntaController.deletePergunta);
-routes.put('/perguntas/:id/image', perguntaController.salvarImagem);
 
 /**
  * Midias
