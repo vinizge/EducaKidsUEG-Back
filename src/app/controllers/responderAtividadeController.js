@@ -12,9 +12,16 @@ class ResponderAtividadeController {
       if (req.body.id) {
         try {
           for (const pergunta of req.body.Pergunta) {
+            if (!pergunta.pergunta.objetiva) {
+              if (pergunta.correcao) {
+                pergunta.nota = pergunta.pergunta.pontuacao;
+              } else {
+                pergunta.nota = 0;
+              }
+            }
             const busca = await ResponderAtividade.findByPk(pergunta.id)
             if (busca) {
-              await ResponderAtividade.update(pergunta, { where: { id: busca.id } });
+              await ResponderAtividade.update(pergunta, { where: { id: busca.dataValues.id } });
             } else {
               return res.json({ message: "ResponderAtividade não existe" });
             }
@@ -34,6 +41,8 @@ class ResponderAtividadeController {
             const busca = await Pergunta.findByPk(perguntas[i].idPergunta);
             if (busca.dataValues.objetiva && (busca.dataValues.gabarito == perguntas[i].resposta)) {
               perguntas[i].nota = busca.dataValues.pontuacao;
+            } else {
+              perguntas[i].nota = 0;
             }
             let salvando = await ResponderAtividade.create(perguntas[i]);
           }
