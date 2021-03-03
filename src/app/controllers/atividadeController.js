@@ -78,7 +78,24 @@ class AtividadeController {
       });
       let lista = new Array();
       for (const atividade of atividades) {
-        if ((atividade.Turmas[0].id == turmaId) && (!atividade.Turmas[0].prazo || atividade.Turmas[0].prazo <= Date.now())) {
+        let prazo = atividade.getDataValue('prazo');
+        let diaDeHoje = new Date();
+        if (prazo) {
+          let dia = AtividadeController.dataFormatada(prazo);
+          let hora = AtividadeController.horaFormatada(prazo);
+          prazo = new Date(dia + ' ' + hora + ':00');
+          let date = new Date(prazo.valueOf() - prazo.getTimezoneOffset() * 60000);
+          let novaData = date.toISOString();
+          prazo = new Date(novaData)
+          dia = AtividadeController.dataFormatada(diaDeHoje);
+          hora = AtividadeController.horaFormatada(diaDeHoje);
+          diaDeHoje = new Date(dia + ' ' + hora + ':00');
+          date = new Date(diaDeHoje.valueOf() - diaDeHoje.getTimezoneOffset() * 60000);
+          novaData = date.toISOString();
+          diaDeHoje = new Date(novaData)
+        }
+
+        if ((atividade.Turmas[0].id == turmaId) && (!prazo || (prazo >= diaDeHoje))) {
           lista.push(atividade);
         }
       }
@@ -141,6 +158,26 @@ class AtividadeController {
       return res.json({ message: "Não foi possível realizar a operação" });
     }
   }
+
+  static dataFormatada(data) {
+    data = new Date(data);
+    let dia = data.getDate().toString(),
+      diaF = (dia.length == 1) ? '0' + dia : dia,
+      mes = (data.getMonth() + 1).toString(), //+1 pois no getMonth Janeiro começa com zero.
+      mesF = (mes.length == 1) ? '0' + mes : mes,
+      anoF = data.getFullYear();
+    return anoF + '-' + mesF + '-' + diaF;
+  }
+
+  static horaFormatada(data) {
+    data = new Date(data);
+    let horas = data.getHours().toString();
+    let horasF = (horas.length == 1) ? '0' + horas : horas;
+    let minutos = data.getMinutes().toString();
+    let minutosF = (minutos.length == 1) ? '0' + minutos : minutos;
+    return horasF + ':' + minutosF;
+  }
+
 }
 
 module.exports = new AtividadeController();

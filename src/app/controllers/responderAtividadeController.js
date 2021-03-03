@@ -33,9 +33,6 @@ class ResponderAtividadeController {
       } else {
         try {
           const atividade = await Atividade.findByPk(req.body.AtividadeId);
-          if (atividade.dataValues.prazo != null && atividade.dataValues.prazo < new Date().now()) {
-            return res.json({ message: "Fora do prazo" });
-          }
           let perguntas = req.body.Pergunta;
           for (let i = 0; i < perguntas.length; i++) {
             const busca = await Pergunta.findByPk(perguntas[i].idPergunta);
